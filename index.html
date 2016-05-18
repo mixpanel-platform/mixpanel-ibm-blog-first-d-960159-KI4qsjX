@@ -1,15 +1,43 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
+<head>
+	<meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/css/reset.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.css">
     <script src="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.js"></script>
-  </head>
-  <body class="mixpanel-platform-body">
-    <h1>Hello, World!</h1>
-    <script>
-      // Run queries and display results here
-    </script>
-  </body>
+	<link rel="stylesheet" href="http://mistic100.github.io/jQCloud/dist/jqcloud2/dist/jqcloud.min.css">
+	<script src="http://mistic100.github.io/jQCloud/dist/jqcloud2/dist/jqcloud.min.js"></script>
+</head>
+<body class="mixpanel-platform-body">
+	<div id='header' style='width:919px'>
+		<center><strong><font size='5'>Word Cloud</font></strong></center>
+	</div>
+	<div id='words'></div>
+	<script>
+		var query = MP.api.segment('Comment', 'Word List', {
+			from: moment().subtract(29, 'days'),
+			to: moment(),
+			limit: 100,
+			type: 'general',
+			unit: 'month'
+		});
+		query.done(function(results) {
+			var words = [];
+			_.each(results.values(), function(vals, word) {
+				var obj = {};
+				obj.text = word;
+				obj.weight = 0;
+				_.each(vals, function(count, date) {
+					obj.weight += count;
+				});
+				words.push(obj);
+			});
+			$('#words').jQCloud(words, {
+			  width: 919,
+			  height: 350,
+			  shape: 'rectangular'
+			});
+		});
+	</script>
+</body>
 </html>
