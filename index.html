@@ -14,8 +14,11 @@
 	</div>
 	<div id='words'></div>
 	<script>
-		var query = MP.api.segment('Comment', 'Word List', {
-			from: moment().subtract(29, 'days'),
+	  var event_name = 'Comment';
+	  var segment_by = 'Word List';
+	  var num_days = 30;
+		var query = MP.api.segment(event_name, segment_by, {
+			from: moment().subtract(num_days - 1, 'days'),
 			to: moment(),
 			limit: 100,
 			type: 'general',
